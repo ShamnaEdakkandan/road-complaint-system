@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Complaint</title>
+
+    <style>
+
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background: #f4f7fc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .form-box{
+            width: 500px;
+            background: white;
+            padding: 35px;
+            border-radius: 14px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .form-box h1{
+            margin-bottom: 25px;
+            color: #1e3c72;
+            text-align: center;
+        }
+
+        .input-group{
+            margin-bottom: 18px;
+        }
+
+        .input-group input,
+        .input-group textarea{
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .input-group textarea{
+            resize: none;
+            height: 120px;
+        }
+
+        .location-btn{
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background: #0f172a;
+            color: white;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .submit-btn{
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background: #1e3c72;
+            color: white;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover{
+            background: #16325c;
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <div class="form-box">
+
+        <h1>Add Complaint</h1>
+
+        <form method="POST" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <div class="input-group">
+                <input type="text" name="title" placeholder="Complaint Title">
+            </div>
+
+            <div class="input-group">
+                <textarea name="description"
+                    placeholder="Complaint Description"></textarea>
+            </div>
+
+            <!-- LOCATION FIELD -->
+
+            <div class="input-group">
+
+                <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    placeholder="Current Location"
+                    readonly
+                >
+
+            </div>
+
+            <button
+                type="button"
+                class="location-btn"
+                onclick="getLocation()"
+            >
+                Get Current Location
+            </button>
+
+            <!-- HIDDEN LATITUDE & LONGITUDE -->
+
+            <input type="hidden" id="latitude" name="latitude">
+
+            <input type="hidden" id="longitude" name="longitude">
+
+            <!-- IMAGE -->
+
+            <div class="input-group">
+                <input type="file" name="image">
+            </div>
+
+            <button type="submit" class="submit-btn">
+                Submit Complaint
+            </button>
+
+        </form>
+
+    </div>
+
+  <script>
+
+async function getLocation(){
+
+    if(navigator.geolocation){
+
+        navigator.geolocation.getCurrentPosition(
+            async function(position){
+
+                let lat = position.coords.latitude;
+                let lon = position.coords.longitude;
+
+                document.getElementById("latitude").value = lat;
+                document.getElementById("longitude").value = lon;
+
+                try{
+
+                    let response = await fetch(
+                        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+                    );
+
+                    let data = await response.json();
+
+                    let place = data.display_name;
+
+                    document.getElementById("location").value = place;
+
+                }catch(error){
+
+                    document.getElementById("location").value =
+                        "Location fetched";
+
+                }
+
+            },
+            function(error){
+
+                alert("Unable to fetch location");
+
+            }
+        );
+
+    }else{
+
+        alert("Geolocation is not supported");
+
+    }
+}
+
+</script>
+
+</body>
+</html>
