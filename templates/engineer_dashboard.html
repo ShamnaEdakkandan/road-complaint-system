@@ -1,203 +1,704 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Engineer Dashboard</title>
-
+    <title>PWD Engineer Portal - Dashboard</title>
+    <!-- Use robust, official-looking font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            /* Refined PWD Official Theme Colors */
+            --pwd-navy: #0B2545;
+            /* Deep elegant navy */
+            --pwd-blue: #133C55;
+            /* Secondary dark blue */
+            --pwd-accent: #386FA4;
+            /* Lighter blue accent */
+            --pwd-gold: #F59E0B;
+            /* Vibrant gold */
+            --pwd-gold-hover: #D97706;
+            /* Darker gold for hover */
+            --bg-light: #F0F4F8;
+            /* Soft blue-gray background */
+            --surface-white: #FFFFFF;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
 
-        *{
+            --sidebar-width: 280px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition-speed: 0.3s;
+        }
+
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'Montserrat', sans-serif;
         }
 
-        body{
-            background: #f4f7fc;
-            padding: 40px;
-        }
-
-        .heading{
+        body {
+            background-color: var(--bg-light);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .heading h1{
-            color: #0f172a;
-        }
-
-        .logout-btn{
-            text-decoration: none;
-            background: #0f172a;
-            color: white;
-            padding: 10px 18px;
-            border-radius: 8px;
-        }
-
-        .table-container{
-            background: white;
-            border-radius: 14px;
+            height: 100vh;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            color: var(--text-dark);
         }
 
-        table{
+        /* Sidebar Styling */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, var(--pwd-navy) 0%, #081a30 100%);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            transition: margin-left var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 20;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar.collapsed {
+            margin-left: calc(-1 * var(--sidebar-width));
+        }
+
+        .brand {
+            height: 80px;
+            display: flex;
+            align-items: center;
+            padding: 0 25px;
+            gap: 15px;
+            background-color: rgba(0, 0, 0, 0.15);
+            border-bottom: 3px solid var(--pwd-gold);
+            box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .brand i {
+            color: var(--pwd-gold);
+            font-size: 1.8rem;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .brand span {
+            font-size: 1.25rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            gap: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 25px;
+            color: #CBD5E1;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            border-left: 4px solid transparent;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0;
+            background-color: rgba(255, 255, 255, 0.05);
+            transition: width 0.3s ease;
+            z-index: 0;
+        }
+
+        .nav-link:hover::before,
+        .nav-link.active::before {
             width: 100%;
-            border-collapse: collapse;
         }
 
-        thead{
-            background: #0f172a;
+        .nav-link span,
+        .nav-link i {
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #ffffff;
+            border-left-color: var(--pwd-gold);
+        }
+
+        .nav-link.active {
+            background-color: rgba(245, 158, 11, 0.1);
+            /* Subtle gold tint */
+        }
+
+        .nav-link i {
+            width: 24px;
+            text-align: center;
+            font-size: 1.25rem;
+            transition: transform 0.2s;
+        }
+
+        .nav-link:hover i {
+            transform: scale(1.1);
+            color: var(--pwd-gold);
+        }
+
+        .nav-link.logout {
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-link.logout:hover {
+            border-left-color: #EF4444;
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        .nav-link.logout:hover i {
+            color: #EF4444;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-light);
+            transition: width var(--transition-speed) ease;
+            width: calc(100% - var(--sidebar-width));
+        }
+
+        /* Top Navbar */
+        .top-navbar {
+            height: 80px;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            box-shadow: var(--shadow-sm);
+            z-index: 10;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .toggle-btn {
+            background: #F1F5F9;
+            border: 1px solid var(--border-color);
+            font-size: 1.2rem;
+            color: var(--pwd-navy);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn:hover {
+            background-color: var(--pwd-navy);
             color: white;
+            border-color: var(--pwd-navy);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
         }
 
-        th, td{
-            padding: 16px;
-            border-bottom: 1px solid #eee;
-            text-align: left;
+        .page-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--pwd-navy);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        tbody tr:hover{
-            background: #f9fbff;
-        }
-
-        img{
-            width: 90px;
-            height: 70px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-
-        select{
-            padding: 8px;
-            border-radius: 8px;
-        }
-
-        .update-btn{
-            background: #0f172a;
-            color: white;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 8px;
+        .profile-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: var(--surface-white);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--pwd-navy);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s;
             cursor: pointer;
         }
 
-    </style>
+        .profile-badge:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--pwd-gold);
+        }
 
+        .profile-badge i {
+            color: var(--pwd-gold);
+            font-size: 1.5rem;
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 40px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-up {
+            animation: fadeInUp 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .delay-1 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.2s;
+        }
+
+        .pwd-header {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .pwd-header h1 {
+            font-size: 1.8rem;
+            color: var(--pwd-navy);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .pwd-header p {
+            color: var(--text-muted);
+            margin-top: 5px;
+            font-size: 1.05rem;
+        }
+
+        /* Official Ledger Table */
+        .ledger-container {
+            background: var(--surface-white);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .ledger-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--pwd-navy) 0%, var(--pwd-blue) 50%, var(--pwd-gold) 100%);
+        }
+
+        .ledger-header {
+            background: #F8FAFC;
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 700;
+            color: var(--pwd-navy);
+            font-size: 1.15rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .ledger-header i {
+            color: var(--pwd-accent);
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        thead {
+            background-color: #F1F5F9;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        th {
+            padding: 16px 20px;
+            text-align: left;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 18px 20px;
+            border-bottom: 1px solid #E2E8F0;
+            font-size: 0.95rem;
+            font-weight: 500;
+            vertical-align: middle;
+            color: var(--text-dark);
+        }
+
+        tbody tr {
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #F8FAFC;
+        }
+
+        tbody tr:hover {
+            background-color: #F1F5F9;
+        }
+
+        .complaint-img {
+            width: 70px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s ease;
+        }
+
+        .complaint-img:hover {
+            transform: scale(1.1);
+            z-index: 10;
+            position: relative;
+        }
+
+        .no-img {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 70px;
+            height: 50px;
+            background: #E2E8F0;
+            color: #94A3B8;
+            font-size: 1.25rem;
+            border-radius: 6px;
+            border: 1px dashed #CBD5E1;
+        }
+
+        /* Status Badges - Formal Styling */
+        .status {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            min-width: 120px;
+            letter-spacing: 0.5px;
+        }
+
+        .status::before {
+            content: '';
+            display: block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .status-pending {
+            background: #FEF3C7;
+            color: #92400E;
+            border: 1px solid #FCD34D;
+        }
+
+        .status-pending::before {
+            background-color: #D97706;
+        }
+
+        .status-progress {
+            background: #E0F2FE;
+            color: #075985;
+            border: 1px solid #BAE6FD;
+        }
+
+        .status-progress::before {
+            background-color: #0284C7;
+        }
+
+        .status-completed {
+            background: #DCFCE7;
+            color: #166534;
+            border: 1px solid #BBF7D0;
+        }
+
+        .status-completed::before {
+            background-color: #16A34A;
+        }
+
+        /* Action Form */
+        .action-form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--surface-white);
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            font-weight: 500;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        select:focus {
+            border-color: var(--pwd-accent);
+            box-shadow: 0 0 0 3px rgba(56, 111, 164, 0.1);
+        }
+
+        .pwd-btn {
+            background-color: var(--pwd-navy);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .pwd-btn:hover {
+            background-color: var(--pwd-blue);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .empty-state {
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .empty-state-icon {
+            font-size: 3.5rem;
+            color: #10B981;
+            /* Emerald green */
+            margin-bottom: 20px;
+            background: #D1FAE5;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
 </head>
+
 <body>
 
-    <div class="heading">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="brand">
+            <i class="fa-solid fa-building-flag"></i>
+            <span>PWD Portal</span>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="#" class="nav-link active">
+                    <i class="fa-solid fa-hard-hat"></i>
+                    <span>Engineer Desk</span>
+                </a>
+            </li>
+            <li style="margin-top: auto;">
+                <a href="/logout/" class="nav-link logout">
+                    <i class="fa-solid fa-power-off"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
 
-        <h1>Engineer Dashboard</h1>
+    <!-- Main Workspace -->
+    <main class="main-content">
+        <!-- Top Navbar -->
+        <header class="top-navbar">
+            <div class="header-left">
+                <button class="toggle-btn" id="sidebarToggle" title="Toggle Sidebar">
+                    <i class="fa-solid fa-bars-staggered"></i>
+                </button>
+                <div class="page-title">Engineer Control Panel</div>
+            </div>
 
-        <a href="/logout/" class="logout-btn">
-            Logout
-        </a>
+            <div class="profile-badge">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>PWD Engineer</span>
+            </div>
+        </header>
 
-    </div>
+        <!-- Content Area -->
+        <div class="content-area">
 
-    <div class="table-container">
+            <div class="pwd-header animate-up">
+                <h1>Official Case Ledger</h1>
+                <p>Public infrastructure reports assigned for engineering review and resolution.</p>
+            </div>
 
-        <table>
+            <div class="ledger-container animate-up delay-1">
+                <div class="ledger-header">
+                    <i class="fa-solid fa-clipboard-list"></i> Active Complaints Registry
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 8%;">Ref ID</th>
+                                <th style="width: 10%;">Evidence</th>
+                                <th style="width: 22%;">Case Subject</th>
+                                <th style="width: 25%;">Site Location</th>
+                                <th style="width: 15%;">Current Status</th>
+                                <th style="width: 20%;">Admin Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for complaint in complaints %}
+                            <tr>
+                                <td style="font-weight: 700; color: var(--pwd-navy);">#{{
+                                    complaint.id|default:forloop.counter }}</td>
+                                <td>
+                                    {% if complaint.image %}
+                                    <img src="{{ complaint.image.url }}" class="complaint-img" alt="Damage">
+                                    {% else %}
+                                    <div class="no-img" title="No Image Provided"><i class="fa-regular fa-image"></i>
+                                    </div>
+                                    {% endif %}
+                                </td>
+                                <td style="font-weight: 600;">{{ complaint.title }}</td>
+                                <td style="color: var(--text-muted);">
+                                    <i class="fa-solid fa-location-dot" style="color: #EF4444; margin-right: 5px;"></i>
+                                    {{ complaint.location|truncatechars:45 }}
+                                </td>
+                                <td>
+                                    {% if complaint.status == 'pending' %}
+                                    <span class="status status-pending">Pending Review</span>
+                                    {% elif complaint.status == 'progress' or complaint.status == 'in_progress' or
+                                    complaint.status == 'In Progress' %}
+                                    <span class="status status-progress">In Progress</span>
+                                    {% elif complaint.status == 'completed' %}
+                                    <span class="status status-completed">Resolved</span>
+                                    {% else %}
+                                    <span class="status status-pending">{{ complaint.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <form method="POST" action="/update-status/{{ complaint.id }}/" class="action-form">
+                                        {% csrf_token %}
+                                        <select name="status">
+                                            <option value="pending" {% if complaint.status=='pending' %}selected{% endif
+                                                %}>Pending</option>
+                                            <option value="progress" {% if complaint.status=='progress' or
+                                                complaint.status=='in_progress' or complaint.status=='In Progress'
+                                                %}selected{% endif %}>In Progress</option>
+                                            <option value="completed" {% if complaint.status=='completed' %}selected{%
+                                                endif %}>Resolved</option>
+                                        </select>
+                                        <button type="submit" class="pwd-btn">Update</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6">
+                                    <div class="empty-state">
+                                        <div class="empty-state-icon">
+                                            <i class="fa-solid fa-check-double"></i>
+                                        </div>
+                                        <h3
+                                            style="font-weight:800;font-size:1.5rem;color:var(--text-dark);margin-bottom:10px;">
+                                            Registry is Clear</h3>
+                                        <p style="color:var(--text-muted);font-size:1.1rem;">No infrastructural cases
+                                            assigned to this desk currently.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-            <thead>
+        </div>
+    </main>
 
-                <tr>
-                    <th>No</th>
-                    <th>Image</th>
-                    <th>Title</th>
-                    <th>Location</th>
-                    <th>Status</th>
-                    <th>Update</th>
-                </tr>
+    <!-- Sidebar Toggle Script -->
+    <script>
+        document.getElementById('sidebarToggle').addEventListener('click', function () {
+            document.getElementById('sidebar').classList.toggle('collapsed');
 
-            </thead>
-
-            <tbody>
-
-                {% for complaint in complaints %}
-
-                <tr>
-
-                    <td>{{ forloop.counter }}</td>
-
-                    <td>
-
-                        {% if complaint.image %}
-                            <img src="{{ complaint.image.url }}">
-                        {% else %}
-                            No Image
-                        {% endif %}
-
-                    </td>
-
-                    <td>{{ complaint.title }}</td>
-
-                    <td>{{ complaint.location|truncatechars:40 }}</td>
-
-                    <td>{{ complaint.status }}</td>
-
-                    <td>
-
-                        <form method="POST"
-                              action="/update-status/{{ complaint.id }}/">
-
-                            {% csrf_token %}
-
-                            <select name="status">
-
-                                <option value="pending">
-                                    Pending
-                                </option>
-
-                                <option value="progress">
-                                    In Progress
-                                </option>
-
-                                <option value="completed">
-                                    Completed
-                                </option>
-
-                            </select>
-
-                            <button type="submit"
-                                    class="update-btn">
-
-                                Update
-
-                            </button>
-
-                        </form>
-
-                    </td>
-
-                </tr>
-
-                {% empty %}
-
-                <tr>
-
-                    <td colspan="6"
-                        style="padding:30px;text-align:center;">
-
-                        No assigned complaints
-
-                    </td>
-
-                </tr>
-
-                {% endfor %}
-
-            </tbody>
-
-        </table>
-
-    </div>
-
+            // Adjust toggle icon
+            const icon = this.querySelector('i');
+            if (document.getElementById('sidebar').classList.contains('collapsed')) {
+                icon.classList.remove('fa-bars-staggered');
+                icon.classList.add('fa-bars');
+            } else {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-bars-staggered');
+            }
+        });
+    </script>
 </body>
+
 </html>

@@ -72,6 +72,26 @@ def engineer_dashboard(request):
 
 
 def add_complaint(request):
+    if request.method == 'POST':
+        title = request.POST['title']
+        description = request.POST['description']
+        location = request.POST['location']
+        latitude = request.POST.get('latitude') or None
+        longitude = request.POST.get('longitude') or None
+        image = request.FILES.get('image')
+
+        Complaint.objects.create(
+            user=request.user,
+            title=title,
+            description=description,
+            location=location,
+            latitude=latitude,
+            longitude=longitude,
+            image=image
+        )
+
+        return redirect('/user-dashboard/')
+    return render(request, 'add_complaint.html')
 
     if request.method == 'POST':
 

@@ -3,113 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-
+    <title>PWD Portal - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-
-        *{
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'Montserrat', Arial, sans-serif;
         }
 
-        body{
+        body {
             height: 100vh;
             display: flex;
+            background: #ffffff;
+            color: #333333;
+        }
+
+        .split-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Left Side: Form Area */
+        .form-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(to right, #1e3c72, #2a5298);
-        }
-
-        .login-box{
-            width: 380px;
-            background: white;
             padding: 40px;
-            border-radius: 14px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            background: #ffffff;
         }
 
-        .login-box h1{
+        .login-box {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .brand-header {
+            margin-bottom: 40px;
             text-align: center;
-            margin-bottom: 30px;
-            color: #1e3c72;
         }
 
-        .input-group{
+        .brand-header h1 {
+            color: #003366;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .brand-header p {
+            color: #666666;
+            font-size: 1rem;
+        }
+
+        .input-group {
             margin-bottom: 20px;
         }
 
-        .input-group input{
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #003366;
+        }
+
+        .input-group input {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
+            padding: 14px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
             outline: none;
-            font-size: 15px;
-            transition: 0.3s;
+            font-size: 1rem;
+            transition: border-color 0.3s;
         }
 
-        .input-group input:focus{
-            border-color: #2a5298;
+        .input-group input:focus {
+            border-color: #00509e;
+            box-shadow: 0 0 0 2px rgba(0, 80, 158, 0.1);
         }
 
-        button{
+        button {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border: none;
-            background: #1e3c72;
+            background: #003366;
             color: white;
-            font-size: 16px;
-            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 4px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: background 0.3s;
+            text-transform: uppercase;
+            margin-top: 10px;
         }
 
-        button:hover{
-            background: #16325c;
+        button:hover {
+            background: #00509e;
         }
 
-        .register-link{
+        .register-link {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 25px;
+            font-size: 0.95rem;
         }
 
-        .register-link a{
+        .register-link a {
             text-decoration: none;
-            color: #1e3c72;
-            font-weight: bold;
+            color: #00509e;
+            font-weight: 700;
+        }
+        
+        .register-link a:hover {
+            text-decoration: underline;
         }
 
-    </style>
+        /* Right Side: Image Area */
+        .image-section {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            background-color: #003366;
+        }
 
+        .image-section img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .split-container {
+                flex-direction: column;
+            }
+            .image-section {
+                display: none; /* Hide image on small screens to prioritize login */
+            }
+        }
+    </style>
 </head>
 <body>
 
-    <div class="login-box">
+    <div class="split-container">
+        
+        <!-- Left: Login Form -->
+        <div class="form-section">
+            <div class="login-box">
+                <div class="brand-header">
+                    <h1>PWD Portal</h1>
+                    <p>Official Public Works Department Login</p>
+                </div>
 
-        <h1>Login</h1>
+                <form method="POST">
+                    {% csrf_token %}
 
-        <form method="POST">
+                    <div class="input-group">
+                        <label>Username</label>
+                        <input type="text" name="username" placeholder="Enter your registered username" required>
+                    </div>
 
-            {% csrf_token %}
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" name="password" placeholder="Enter your secure password" required>
+                    </div>
 
-            <div class="input-group">
-                <input type="text" name="username" placeholder="Enter Username">
+                    <button type="submit">Secure Login</button>
+                </form>
+
+                <div class="register-link">
+                    <p>Don't have a citizen account? <a href="/register/">Register Here</a></p>
+                </div>
             </div>
+        </div>
 
-            <div class="input-group">
-                <input type="password" name="password" placeholder="Enter Password">
-            </div>
-
-            <button type="submit">Login</button>
-
-        </form>
-
-        <div class="register-link">
-            <p>Don't have an account?
-                <a href="/register/">Register</a>
-            </p>
+        <!-- Right: Illustration -->
+        <div class="image-section">
+            <img src="/media/login_illustration.png" alt="Road Repair Illustration">
         </div>
 
     </div>

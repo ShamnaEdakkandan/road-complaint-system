@@ -3,99 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-
+    <title>PWD Portal - Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        *{
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'Montserrat', Arial, sans-serif;
         }
 
-        body{
+        body {
             height: 100vh;
             display: flex;
+            background: #ffffff;
+            color: #333333;
+        }
+
+        .split-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Left Side: Form Area */
+        .form-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(to right, #1e3c72, #2a5298);
-        }
-
-        .register-box{
-            width: 380px;
-            background: white;
             padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            background: #ffffff;
         }
 
-        .register-box h1{
+        .register-box {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .brand-header {
+            margin-bottom: 40px;
             text-align: center;
-            margin-bottom: 30px;
-            color: #1e3c72;
         }
 
-        .input-group{
+        .brand-header h1 {
+            color: #003366;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .brand-header p {
+            color: #666666;
+            font-size: 1rem;
+        }
+
+        .input-group {
             margin-bottom: 20px;
         }
 
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #003366;
+        }
+
         .input-group input,
-        .input-group select{
+        .input-group select {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
+            padding: 14px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
             outline: none;
-            font-size: 15px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            background-color: #ffffff;
         }
 
         .input-group input:focus,
-        .input-group select:focus{
-            border-color: #2a5298;
+        .input-group select:focus {
+            border-color: #00509e;
+            box-shadow: 0 0 0 2px rgba(0, 80, 158, 0.1);
         }
 
-        button{
+        button {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border: none;
-            background: #1e3c72;
+            background: #003366;
             color: white;
-            font-size: 16px;
-            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 4px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: background 0.3s;
+            text-transform: uppercase;
+            margin-top: 10px;
         }
 
-        button:hover{
-            background: #16325c;
+        button:hover {
+            background: #00509e;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.95rem;
+        }
+
+        .login-link a {
+            text-decoration: none;
+            color: #00509e;
+            font-weight: 700;
+        }
+        
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Right Side: Image Area */
+        .image-section {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            background-color: #003366;
+        }
+
+        .image-section img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .split-container {
+                flex-direction: column;
+            }
+            .image-section {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="register-box">
-        <h1>Register</h1>
+    <div class="split-container">
+        
+        <!-- Left: Form -->
+        <div class="form-section">
+            <div class="register-box">
+                <div class="brand-header">
+                    <h1>Create Account</h1>
+                    <p>Register for PWD Access</p>
+                </div>
 
-        <form method="POST">
-            {% csrf_token %}
+                <form method="POST">
+                    {% csrf_token %}
 
-            <div class="input-group">
-                <input type="text" name="username" placeholder="Enter Username">
+                    <div class="input-group">
+                        <label>Username</label>
+                        <input type="text" name="username" placeholder="Choose a username" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" name="password" placeholder="Create a secure password" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Account Type (Role)</label>
+                        <select name="role" required>
+                            <option value="citizen">Standard Citizen</option>
+                            <option value="engineer">PWD Engineer</option>
+                        </select>
+                    </div>
+
+                    <button type="submit">Submit Registration</button>
+                </form>
+
+                <div class="login-link">
+                    <p>Already have an account? <a href="/login/">Return to Login</a></p>
+                </div>
             </div>
+        </div>
 
-            <div class="input-group">
-                <input type="password" name="password" placeholder="Enter Password">
-            </div>
+        <!-- Right: Illustration -->
+        <div class="image-section">
+            <img src="/media/login_illustration.png" alt="Road Repair Illustration">
+        </div>
 
-            <div class="input-group">
-                <select name="role">
-                    <option value="citizen">Citizen</option>
-                    <option value="engineer">Engineer</option>
-                </select>
-            </div>
-
-            <button type="submit">Register</button>
-        </form>
     </div>
 
 </body>
