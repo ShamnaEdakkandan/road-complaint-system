@@ -605,7 +605,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th style="width: 8%;">Ref ID</th>
+                                <!-- <th style="width: 8%;">Ref ID</th> -->
                                 <th style="width: 10%;">Evidence</th>
                                 <th style="width: 22%;">Case Subject</th>
                                 <th style="width: 25%;">Site Location</th>
@@ -616,8 +616,8 @@
                         <tbody>
                             {% for complaint in complaints %}
                             <tr>
-                                <td style="font-weight: 700; color: var(--pwd-navy);">#{{
-                                    complaint.id|default:forloop.counter }}</td>
+                                <!-- <td style="font-weight: 700; color: var(--pwd-navy);">#{{
+                                    complaint.id|default:forloop.counter }}</td> -->
                                 <td>
                                     {% if complaint.image %}
                                     <img src="{{ complaint.image.url }}" class="complaint-img" alt="Damage">
