@@ -545,6 +545,53 @@
             margin-left: auto;
             margin-right: auto;
         }
+
+        /* Tab System Styles */
+        .tabs-wrapper {
+            display: flex;
+            gap: 0;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            position: relative;
+        }
+
+        .tab-btn {
+            padding: 16px 32px;
+            background: transparent;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn:hover {
+            color: var(--pwd-navy);
+        }
+
+        .tab-btn.active {
+            color: var(--pwd-navy);
+            border-bottom-color: var(--pwd-gold);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeInUp 0.3s ease-out forwards;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-icon {
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
     </style>
 </head>
 
@@ -598,88 +645,179 @@
             </div>
 
             <div class="ledger-container animate-up delay-1">
-                <div class="ledger-header">
-                    <i class="fa-solid fa-clipboard-list"></i> Active Complaints Registry
+                <!-- <div class="ledger-header">
+                    <i class="fa-solid fa-clipboard-list"></i> Official Case Ledger
+                </div> -->
+                <div class="tabs-wrapper">
+                    <button type="button" class="tab-btn active" data-tab="active">
+                        <i class="fa-solid fa-clipboard-list tab-icon"></i>Active Complaints
+                    </button>
+                    <button type="button" class="tab-btn" data-tab="resolved">
+                        <i class="fa-solid fa-folder-open tab-icon"></i>Resolved Complaints
+                    </button>
                 </div>
-                <div class="table-responsive">
-                    <table>
-                        <thead>
-                            <tr>
-                                <!-- <th style="width: 8%;">Ref ID</th> -->
-                                <th style="width: 10%;">Evidence</th>
-                                <th style="width: 22%;">Case Subject</th>
-                                <th style="width: 25%;">Site Location</th>
-                                <th style="width: 15%;">Current Status</th>
-                                <th style="width: 20%;">Admin Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for complaint in complaints %}
-                            <tr>
-                                <!-- <td style="font-weight: 700; color: var(--pwd-navy);">#{{
+                <div class="tab-content active" id="tab-active">
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <!-- <th style="width: 8%;">Ref ID</th> -->
+                                    <th style="width: 10%;">Evidence</th>
+                                    <th style="width: 22%;">Case Subject</th>
+                                    <th style="width: 25%;">Site Location</th>
+                                    <th style="width: 15%;">Current Status</th>
+                                    <th style="width: 20%;">Admin Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for complaint in active_complaints %}
+                                <tr>
+                                    <!-- <td style="font-weight: 700; color: var(--pwd-navy);">#{{
                                     complaint.id|default:forloop.counter }}</td> -->
-                                <td>
-                                    {% if complaint.image %}
-                                    <img src="{{ complaint.image.url }}" class="complaint-img" alt="Damage">
-                                    {% else %}
-                                    <div class="no-img" title="No Image Provided"><i class="fa-regular fa-image"></i>
-                                    </div>
-                                    {% endif %}
-                                </td>
-                                <td style="font-weight: 600;">{{ complaint.title }}</td>
-                                <td style="color: var(--text-muted);">
-                                    <i class="fa-solid fa-location-dot" style="color: #EF4444; margin-right: 5px;"></i>
-                                    {{ complaint.location|truncatechars:45 }}
-                                </td>
-                                <td>
-                                    {% if complaint.status == 'pending' %}
-                                    <span class="status status-pending">Pending Review</span>
-                                    {% elif complaint.status == 'progress' or complaint.status == 'in_progress' or
-                                    complaint.status == 'In Progress' %}
-                                    <span class="status status-progress">In Progress</span>
-                                    {% elif complaint.status == 'completed' %}
-                                    <span class="status status-completed">Resolved</span>
-                                    {% else %}
-                                    <span class="status status-pending">{{ complaint.status }}</span>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    <form method="POST" action="/update-status/{{ complaint.id }}/" class="action-form">
-                                        {% csrf_token %}
-                                        <select name="status">
-                                            <option value="pending" {% if complaint.status=='pending' %}selected{% endif
-                                                %}>Pending</option>
-                                            <option value="progress" {% if complaint.status=='progress' or
-                                                complaint.status=='in_progress' or complaint.status=='In Progress'
-                                                %}selected{% endif %}>In Progress</option>
-                                            <option value="completed" {% if complaint.status=='completed' %}selected{%
-                                                endif %}>Resolved</option>
-                                        </select>
-                                        <button type="submit" class="pwd-btn">Update</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="6">
-                                    <div class="empty-state">
-                                        <div class="empty-state-icon">
-                                            <i class="fa-solid fa-check-double"></i>
+                                    <td>
+                                        {% if complaint.image %}
+                                        <img src="{{ complaint.image.url }}" class="complaint-img" alt="Damage">
+                                        {% else %}
+                                        <div class="no-img" title="No Image Provided"><i
+                                                class="fa-regular fa-image"></i>
                                         </div>
-                                        <h3
-                                            style="font-weight:800;font-size:1.5rem;color:var(--text-dark);margin-bottom:10px;">
-                                            Registry is Clear</h3>
-                                        <p style="color:var(--text-muted);font-size:1.1rem;">No infrastructural cases
-                                            assigned to this desk currently.</p>
-                                    </div>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                                        {% endif %}
+                                    </td>
+                                    <td style="font-weight: 600;">{{ complaint.title }}</td>
+                                    <td style="color: var(--text-muted);">
+                                        <i class="fa-solid fa-location-dot"
+                                            style="color: #EF4444; margin-right: 5px;"></i>
+                                        {{ complaint.location|truncatechars:45 }}
+                                    </td>
+                                    <td>
+                                        {% if complaint.status == 'pending' %}
+                                        <span class="status status-pending">Pending Review</span>
+                                        {% elif complaint.status == 'progress' or complaint.status == 'in_progress' or
+                                        complaint.status == 'In Progress' %}
+                                        <span class="status status-progress">In Progress</span>
+                                        {% elif complaint.status == 'completed' %}
+                                        <span class="status status-completed">Resolved</span>
+                                        {% else %}
+                                        <span class="status status-pending">{{ complaint.status }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <form method="POST" action="/update-status/{{ complaint.id }}/"
+                                            class="action-form">
+                                            {% csrf_token %}
+
+                                            <select name="status">
+                                                <option value="pending" {% if complaint.status=='pending' %}selected{%
+                                                    endif %}>
+                                                    Pending
+                                                </option>
+
+                                                <option value="progress" {% if complaint.status=='progress' or
+                                                    complaint.status=='in_progress' or complaint.status=='In Progress'
+                                                    %} selected {% endif %}>
+                                                    In Progress
+                                                </option>
+
+                                                <option value="completed" {% if complaint.status=='completed'
+                                                    %}selected{% endif %}>
+                                                    Resolved
+                                                </option>
+                                            </select>
+                                            <button type="submit" class="pwd-btn">Update</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="empty-state">
+                                            <div class="empty-state-icon">
+                                                <i class="fa-solid fa-check-double"></i>
+                                            </div>
+                                            <h3
+                                                style="font-weight:800;font-size:1.5rem;color:var(--text-dark);margin-bottom:10px;">
+                                                Registry is Clear</h3>
+                                            <p style="color:var(--text-muted);font-size:1.1rem;">No infrastructural
+                                                cases
+                                                assigned to this desk currently.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-content" id="tab-resolved" style="margin-top: 1.5rem;">
+                    <!-- <div class="ledger-header">
+                    <i class="fa-solid fa-folder-open"></i> Resolved Complaints Registry
+                </div> -->
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 10%;">Evidence</th>
+                                    <th style="width: 22%;">Case Subject</th>
+                                    <th style="width: 25%;">Site Location</th>
+                                    <th style="width: 15%;">Current Status</th>
+                                    <th style="width: 20%;">Admin Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for complaint in resolved_complaints %}
+                                <tr>
+                                    <td>
+                                        {% if complaint.image %}
+                                        <img src="{{ complaint.image.url }}" class="complaint-img" alt="Damage">
+                                        {% else %}
+                                        <div class="no-img" title="No Image Provided"><i
+                                                class="fa-regular fa-image"></i>
+                                        </div>
+                                        {% endif %}
+                                    </td>
+                                    <td style="font-weight: 600;">{{ complaint.title }}</td>
+                                    <td style="color: var(--text-muted);">
+                                        <i class="fa-solid fa-location-dot"
+                                            style="color: #EF4444; margin-right: 5px;"></i>
+                                        {{ complaint.location|truncatechars:45 }}
+                                    </td>
+                                    <td>
+                                        <span class="status status-completed">Resolved</span>
+                                    </td>
+                                    <td>
+                                        <form method="POST" action="/update-status/{{ complaint.id }}/"
+                                            class="action-form">
+                                            {% csrf_token %}
+                                            <select name="status">
+                                                <option value="pending">Pending</option>
+                                                <option value="progress">In Progress</option>
+                                                <option value="completed" selected>Resolved</option>
+                                            </select>
+                                            <button type="submit" class="pwd-btn">Update</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="empty-state">
+                                            <div class="empty-state-icon">
+                                                <i class="fa-solid fa-check-double"></i>
+                                            </div>
+                                            <h3
+                                                style="font-weight:800;font-size:1.5rem;color:var(--text-dark);margin-bottom:10px;">
+                                                No Resolved Cases Yet</h3>
+                                            <p style="color:var(--text-muted);font-size:1.1rem;">Resolved cases will
+                                                appear here once the status is updated to Resolved.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-
         </div>
     </main>
 
@@ -697,6 +835,21 @@
                 icon.classList.remove('fa-bars');
                 icon.classList.add('fa-bars-staggered');
             }
+        });
+
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const target = button.getAttribute('data-tab');
+
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+
+                button.classList.add('active');
+                document.getElementById(`tab-${target}`).classList.add('active');
+            });
         });
     </script>
 </body>

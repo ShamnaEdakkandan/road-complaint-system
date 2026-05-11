@@ -68,19 +68,50 @@ def forgot_password(request):
 
 
 def user_dashboard(request):
-    return render(request, 'user_dashboard.html')
+
+    total_complaints = Complaint.objects.filter(
+        user=request.user
+    ).count()
+
+    in_progress = Complaint.objects.filter(
+        user=request.user,
+        status='progress'
+    ).count()
+
+    resolved = Complaint.objects.filter(
+        user=request.user,
+        status='completed'
+    ).count()
+
+    return render(
+        request,
+        'user_dashboard.html',
+        {
+            'total_complaints': total_complaints,
+            'in_progress': in_progress,
+            'resolved': resolved,
+        }
+    )
 
 
 def engineer_dashboard(request):
 
-    complaints = Complaint.objects.filter(
+    active_complaints = Complaint.objects.filter(
         assigned_to=request.user
+    ).exclude(status='completed')
+
+    resolved_complaints = Complaint.objects.filter(
+        assigned_to=request.user,
+        status='completed'
     )
 
     return render(
         request,
         'engineer_dashboard.html',
-        {'complaints': complaints}
+        {
+            'active_complaints': active_complaints,
+            'resolved_complaints': resolved_complaints
+        }
     )
 
 
