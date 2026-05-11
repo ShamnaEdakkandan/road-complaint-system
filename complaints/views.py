@@ -42,16 +42,29 @@ def login_view(request):
         )
 
         if user is not None:
-
             login(request, user)
-
             if user.profile.role == 'engineer':
                 return redirect('/engineer-dashboard/')
-
             else:
                 return redirect('/user-dashboard/')
 
+        return render(request, 'login.html', {'error': 'Invalid username or password'})
+
     return render(request, 'login.html')
+
+
+def forgot_password(request):
+    message = None
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        try:
+            User.objects.get(username=username)
+        except User.DoesNotExist:
+            pass
+        message = 'If that username is registered, password reset instructions have been sent to the associated email address.'
+
+    return render(request, 'forgot_password.html', {'message': message})
 
 
 def user_dashboard(request):
