@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PWD Citizen Portal - Dashboard</title>
-    <!-- Use robust, official-looking font -->
+
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            /* Refined PWD Official Theme Colors */
+           
             --pwd-navy: #0B2545;       /* Deep elegant navy */
             --pwd-blue: #133C55;      /* Secondary dark blue */
             --pwd-accent: #386FA4;    /* Lighter blue accent */
@@ -44,7 +44,7 @@
             color: var(--text-dark);
         }
 
-        /* Sidebar Styling */
+      
         .sidebar {
             width: var(--sidebar-width);
             background: linear-gradient(180deg, var(--pwd-navy) 0%, #081a30 100%);
@@ -167,7 +167,7 @@
             color: #EF4444;
         }
 
-        /* Main Content */
+      
         .main-content {
             flex-grow: 1;
             display: flex;
@@ -177,7 +177,6 @@
             width: calc(100% - var(--sidebar-width));
         }
 
-        /* Top Navbar */
         .top-navbar {
             height: 80px;
             background-color: rgba(255, 255, 255, 0.95);
@@ -254,14 +253,15 @@
             font-size: 1.5rem;
         }
 
-        /* Content Area */
+     
         .content-area {
             padding: 40px;
             overflow-y: auto;
             flex-grow: 1;
         }
 
-        /* Animations */
+   
+        
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -289,9 +289,9 @@
             color: white;
         }
         
-        /* Decorative background element for banner */
+
         .pwd-banner::before {
-            content: "\f279"; /* Map icon code */
+            content: "\f279"; 
             font-family: "Font Awesome 6 Free";
             font-weight: 900;
             position: absolute;
@@ -326,7 +326,7 @@
             font-weight: 400;
         }
 
-        /* Action Panels */
+     
         .panel-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -453,7 +453,7 @@
             color: #ffffff;
         }
 
-        /* Quick Stats Row added to layout */
+       
         .stats-row {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -546,9 +546,9 @@
         </ul>
     </aside>
 
-    <!-- Main Workspace -->
+  
     <main class="main-content">
-        <!-- Top Navbar -->
+     
         <header class="top-navbar">
             <div class="header-left">
                 <button class="toggle-btn" id="sidebarToggle" title="Toggle Sidebar">
@@ -563,10 +563,10 @@
             </div>
         </header>
 
-        <!-- Content Area -->
+        
         <div class="content-area">
 
-            <!-- Banner -->
+         
             <div class="pwd-banner animate-up">
                 <div class="banner-content">
                     <h1>Public Works Department</h1>
@@ -574,7 +574,7 @@
                 </div>
             </div>
             
-            <!-- Quick Stats -->
+         
             <div class="stats-row animate-up delay-1">
                 <div class="stat-card">
                     <div class="stat-icon icon-blue">
@@ -606,7 +606,6 @@
             </div>
 
             <div class="panel-grid animate-up delay-2">
-                <!-- Panel 1 -->
                 <div class="pwd-panel">
                     <div class="pwd-panel-header">
                         <div class="panel-icon-wrap">
@@ -624,7 +623,7 @@
                     </div>
                 </div>
 
-                <!-- Panel 2 -->
+              
                 <div class="pwd-panel">
                     <div class="pwd-panel-header">
                         <div class="panel-icon-wrap">
@@ -646,12 +645,12 @@
         </div>
     </main>
 
-    <!-- Sidebar Toggle Script -->
+  
     <script>
         document.getElementById('sidebarToggle').addEventListener('click', function () {
             document.getElementById('sidebar').classList.toggle('collapsed');
             
-            // Adjust toggle icon
+         
             const icon = this.querySelector('i');
             if (document.getElementById('sidebar').classList.contains('collapsed')) {
                 icon.classList.remove('fa-bars-staggered');

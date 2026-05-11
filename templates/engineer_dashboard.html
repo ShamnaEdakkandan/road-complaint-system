@@ -51,7 +51,7 @@
             color: var(--text-dark);
         }
 
-        /* Sidebar Styling */
+ 
         .sidebar {
             width: var(--sidebar-width);
             background: linear-gradient(180deg, var(--pwd-navy) 0%, #081a30 100%);
@@ -176,7 +176,7 @@
             color: #EF4444;
         }
 
-        /* Main Content */
+
         .main-content {
             flex-grow: 1;
             display: flex;
@@ -186,7 +186,6 @@
             width: calc(100% - var(--sidebar-width));
         }
 
-        /* Top Navbar */
         .top-navbar {
             height: 80px;
             background-color: rgba(255, 255, 255, 0.95);
@@ -263,14 +262,13 @@
             font-size: 1.5rem;
         }
 
-        /* Content Area */
+ 
         .content-area {
             padding: 40px;
             overflow-y: auto;
             flex-grow: 1;
         }
 
-        /* Animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -314,7 +312,7 @@
             font-size: 1.05rem;
         }
 
-        /* Official Ledger Table */
+
         .ledger-container {
             background: var(--surface-white);
             border: 1px solid var(--border-color);
@@ -426,7 +424,6 @@
             border: 1px dashed #CBD5E1;
         }
 
-        /* Status Badges - Formal Styling */
         .status {
             padding: 6px 12px;
             font-size: 0.75rem;
@@ -479,7 +476,6 @@
             background-color: #16A34A;
         }
 
-        /* Action Form */
         .action-form {
             display: flex;
             align-items: center;
@@ -546,7 +542,6 @@
             margin-right: auto;
         }
 
-        /* Tab System Styles */
         .tabs-wrapper {
             display: flex;
             gap: 0;
@@ -597,7 +592,6 @@
 
 <body>
 
-    <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="brand">
             <i class="fa-solid fa-building-flag"></i>
@@ -619,9 +613,8 @@
         </ul>
     </aside>
 
-    <!-- Main Workspace -->
+
     <main class="main-content">
-        <!-- Top Navbar -->
         <header class="top-navbar">
             <div class="header-left">
                 <button class="toggle-btn" id="sidebarToggle" title="Toggle Sidebar">
@@ -821,7 +814,7 @@
         </div>
     </main>
 
-    <!-- Sidebar Toggle Script -->
+   
     <script>
         document.getElementById('sidebarToggle').addEventListener('click', function () {
             document.getElementById('sidebar').classList.toggle('collapsed');
